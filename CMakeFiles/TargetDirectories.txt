@@ -1,0 +1,3 @@
+/Users/apple/CWorkSpace/MacOpenCV/CMakeFiles/rebuild_cache.dir
+/Users/apple/CWorkSpace/MacOpenCV/CMakeFiles/edit_cache.dir
+/Users/apple/CWorkSpace/MacOpenCV/CMakeFiles/DisplayImage.dir
