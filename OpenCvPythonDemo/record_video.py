@@ -26,8 +26,9 @@ def get_dims(cap, res='1080p'):
     return width, height
 
 VIDEO_TYPE = {
-    'avi': cv2.VideoWriter_fourcc(*'XVID'),
+    'avi': cv2.VideoWriter_fourcc('M','J','P','G'),
     'mp4': cv2.VideoWriter_fourcc(*'XVID'),
+    # 'avi': cv2.VideoWriter_fourcc(*'XVID'),
 }
 
 def get_video_type(filename) :
@@ -40,12 +41,9 @@ cap = cv2.VideoCapture(0)
 dims = get_dims(cap, res=my_res)
 vidoe_type_cv2 = get_video_type(filename)
 
-out = cv2.VideoWriter(filename, cv2.VideoWriter_fourcc('M','J','P','G'), frames_per_seconds, dims)
-# out = cv2.VideoWriter(filename,  cv2.VideoWriter_fourcc('M','J','P','G'), frames_per_seconds, (1280, 720))
-
+out = cv2.VideoWriter(filename, vidoe_type_cv2, frames_per_seconds, dims)
 print ("this is a tuple: %s" %(dims,))
 
-# change_res(cap, 1280, 720)
 change_res(cap, dims[0], dims[1])
 
 while(True):
