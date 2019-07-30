@@ -45,13 +45,13 @@ out = cv2.VideoWriter(filename, cv2.VideoWriter_fourcc('M','J','P','G'), frames_
 
 print ("this is a tuple: %s" %(dims,))
 
-change_res(cap, 1280, 720)
+# change_res(cap, 1280, 720)
+change_res(cap, dims[0], dims[1])
 
 while(True):
     ret, frame = cap.read()
     out.write(frame)
 
-    # gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     cv2.imshow('frame', frame)
     if cv2.waitKey(20) & 0xFF == ord('q'):
             break
