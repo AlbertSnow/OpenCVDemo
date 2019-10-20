@@ -14,6 +14,16 @@ while(True) :
 
     for(x, y, w, h) in faces:
         print(x, y, w, h)
+        roi_gray = gray[y:y+h, x:x+w] #(ycord1_start, ycord_end)
+        roi_color = frame[y:y+h, x:x+w]
+        img_item = "my_image.png"
+        cv2.imwrite(img_item, roi_gray)
+
+        color = (255, 0, 0) #BGR 0-255
+        stroke = 2
+        end_cord_x = x + w
+        end_cord_y = y + h
+        cv2.rectangle(frame, (x, y), (end_cord_x, end_cord_y), color, stroke)
 
     #Display the resulting frame
     cv2.imshow('Frame', frame)
