@@ -34,6 +34,8 @@ for root, dirs, files in os.walk(image_dir):
             # x_train.append(path) # trun into a NUMPY array, GRAY
             
             pil_image = Image.open(path).convert("L") # grayscale
+            size = (550, 550)
+            final_img = pil_image.resize(size, Image.ANTIALIAS)
             image_array = np.array(pil_image, "uint8")
             # print(image_array)
 
