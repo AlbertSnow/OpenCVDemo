@@ -31,7 +31,7 @@ while(True) :
         # recognize? deep learned model predict keras tensorflow pytorch scikit learn.
         id_, conf = recognizer.predict(roi_gray)
 
-        if conf >= 4 and conf <= 85:
+        if conf >= 4:
             print(id_)
             print(labels[id_])
             font = cv2.FONT_HERSHEY_COMPLEX
@@ -48,9 +48,9 @@ while(True) :
         end_cord_x = x + w
         end_cord_y = y + h
         cv2.rectangle(frame, (x, y), (end_cord_x, end_cord_y), color, stroke)
-        smiles = smile_cascade.detectMultiScale(roi_gray)
-        for(smx, smy, smw, smh) in smiles:
-            cv2.rectangle(roi_color, (smx, smy), (smx+smw, smy+smh), (0, 255, 0), 2)
+        # smiles = smile_cascade.detectMultiScale(roi_gray)
+        # for(smx, smy, smw, smh) in smiles:
+        #     cv2.rectangle(roi_color, (smx, smy), (smx+smw, smy+smh), (0, 255, 0), 2)
         # eyes = eye_cascade.detectMultiScale(roi_gray)
         # for(ex, ey, ew, eh) in eyes:
         #     cv2.rectangle(roi_color, (ex, ey), (ex+ew, ey+eh), (0, 255, 0), 2)
