@@ -45,7 +45,7 @@ while(True) :
             for i in range(0, gw):
                 for j in range(0, gh):
                     if glasses2[i, j][3] != 0: # alpha 0 
-                        roi_color[ey + i, ex + j] = glasses2[i, j]
+                        roi_color[ey + int(eh/4.0) + i, ex + j] = glasses2[i, j]
 
         nose = nose_cascade.detectMultiScale(roi_gray, scaleFactor=1.5, minNeighbors=5)
         for (nx, ny, nw, nh) in nose:
