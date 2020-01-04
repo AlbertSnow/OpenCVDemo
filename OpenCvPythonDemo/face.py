@@ -5,7 +5,10 @@ import pickle
 
 face_cascade = cv2.CascadeClassifier('cascades/data/haarcascades/haarcascade_frontalface_alt2.xml')
 eye_cascade = cv2.CascadeClassifier('cascades/data/haarcascades/haarcascade_eye.xml')
-smile_cascade = cv2.CascadeClassifier('cascades/data/haarcascades/haarcascade_smile.xml')
+# smile_cascade = cv2.CascadeClassifier('cascades/data/haarcascades/haarcascade_smile.xml')
+nose_cascade = cv2.CascadeClassifier('cascades/third-party/Nose18x15.xml')
+glasses = cv2.imread("images/fun/glasses.png", -1);
+mustache = cv2.imread("images/fun/mustache.png", -1);
 
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 recognizer.read("trainner.yml")
@@ -27,6 +30,17 @@ while(True) :
         # print(x, y, w, h)
         roi_gray = gray[y:y+h, x:x+w] #(ycord1_start, ycord_end)
         roi_color = frame[y:y+h, x:x+w]
+        cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 255, 255), 3)
+
+        eyes = eye_cascade.detectMultiScale(roi_gray, scaleFactor=1.5, minNeighbors=5)
+        for (ex, ey, ew, eh) in eyes:
+            cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 255), 3)
+            roi_eyes = roi_gray[ey: ey + eh, ex: ex + ew]
+
+        nose = nose_cascade.detectMultiScale(roi_gray, scaleFactor=1.5, minNeighbors=5)
+        for (nx, ny, nw, nh) in nose:
+            cv2.rectangle(roi_color, (nx, ny), (nx + nw, ny + nh), (255, 0, 0), 3)
+            roi_nose = roi_gray[ny: ny + nh, nx: nx + nw]
 
         # recognize? deep learned model predict keras tensorflow pytorch scikit learn.
         id_, conf = recognizer.predict(roi_gray)
@@ -40,14 +54,14 @@ while(True) :
             stroke = 2
             cv2.putText(frame, name, (x, y), font, 1, color, stroke, cv2.LINE_AA)
 
-        img_item = "5.png"
-        cv2.imwrite(img_item, roi_color)
+        # img_item = "5.png"
+        # cv2.imwrite(img_item, roi_color)
 
         color = (255, 0, 0) #BGR 0-255
         stroke = 2
         end_cord_x = x + w
         end_cord_y = y + h
-        cv2.rectangle(frame, (x, y), (end_cord_x, end_cord_y), color, stroke)
+        # cv2.rectangle(frame, (x, y), (end_cord_x, end_cord_y), color, stroke)
         # smiles = smile_cascade.detectMultiScale(roi_gray)
         # for(smx, smy, smw, smh) in smiles:
         #     cv2.rectangle(roi_color, (smx, smy), (smx+smw, smy+smh), (0, 255, 0), 2)
