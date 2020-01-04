@@ -3,6 +3,8 @@ import numpy as np
 import cv2
 import pickle
 
+from utils import CFEVideoConf, image_resize
+
 face_cascade = cv2.CascadeClassifier('cascades/data/haarcascades/haarcascade_frontalface_alt2.xml')
 eye_cascade = cv2.CascadeClassifier('cascades/data/haarcascades/haarcascade_eye.xml')
 # smile_cascade = cv2.CascadeClassifier('cascades/data/haarcascades/haarcascade_smile.xml')
@@ -25,22 +27,38 @@ while(True) :
     ret, frame = cap.read()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.5, minNeighbors=5)
-
+    
+    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2BGRA)
     for(x, y, w, h) in faces:
         # print(x, y, w, h)
         roi_gray = gray[y:y+h, x:x+w] #(ycord1_start, ycord_end)
         roi_color = frame[y:y+h, x:x+w]
-        cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 255, 255), 3)
+        # cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 255, 255), 3)
 
         eyes = eye_cascade.detectMultiScale(roi_gray, scaleFactor=1.5, minNeighbors=5)
         for (ex, ey, ew, eh) in eyes:
-            cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 255), 3)
+            # cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 255), 3)
             roi_eyes = roi_gray[ey: ey + eh, ex: ex + ew]
+            glasses2 = image_resize(glasses.copy(), width = ew)
+
+            gw, gh, gc = glasses2.shape
+            for i in range(0, gw):
+                for j in range(0, gh):
+                    if glasses2[i, j][3] != 0: # alpha 0 
+                        roi_color[ey + i, ex + j] = glasses2[i, j]
 
         nose = nose_cascade.detectMultiScale(roi_gray, scaleFactor=1.5, minNeighbors=5)
         for (nx, ny, nw, nh) in nose:
-            cv2.rectangle(roi_color, (nx, ny), (nx + nw, ny + nh), (255, 0, 0), 3)
+            # cv2.rectangle(roi_color, (nx, ny), (nx + nw, ny + nh), (255, 0, 0), 3)
             roi_nose = roi_gray[ny: ny + nh, nx: nx + nw]
+            mustache2 = image_resize(mustache.copy(), width = nw)
+            
+            mw, mh, mc = mustache2.shape
+            for i in range(0, mw):
+                for j in range(0, mh):
+                    if mustache2[i, j][3] != 0: # alpha 0 
+                        roi_color[ny + int(nh/2.0) + i, nx + j] = mustache[i, j]
+            break;
 
         # recognize? deep learned model predict keras tensorflow pytorch scikit learn.
         id_, conf = recognizer.predict(roi_gray)
@@ -70,6 +88,7 @@ while(True) :
         #     cv2.rectangle(roi_color, (ex, ey), (ex+ew, ey+eh), (0, 255, 0), 2)
 
     #Display the resulting frame
+    # frame = cv2.cvtColor(frame, cv2.COLOR_BGRA2BGR)
     cv2.imshow('Frame', frame)
     if cv2.waitKey(20) & 0xFF == ord('q'):
         break
