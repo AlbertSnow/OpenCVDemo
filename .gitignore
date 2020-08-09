@@ -6,3 +6,6 @@
 /CMakeCache.txt
 /DisplayImage
 /cmake_install.cmake
+**/.DS_Store
+.vscode
+Video
